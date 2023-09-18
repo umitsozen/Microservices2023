@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+	s_api_gateway:
+		container_name:c_api_gateway
+		image: umitsozen/apigateway
+		build:
+			context: .
+			dockerfile: ApiGateway/Dockerfile
+		ports:
+			- 80:80
+		networks: 
+			- micro_net
+			- internal_net
+
+	s_contact_api:
+		container_name: c_contact_api
+		image: umitsozen/contact_api
+		build:
+			context: .
+			dockerfile: Services/ContacAPI/Contact.API/Dockerfile
+		ports:
+			- 9000:9000
+		networks:
+			- internal_net
+
+	s_reservation_api:
+		container_name: c_reservation_api
+		image: umitsozen/reservation_api
+		build:
+			context: .
+			dockerfile: Services/ReservationAPI/Reservation.API/Dockerfile
+		ports:
+			- 7000:7000
+		networks:
+			- internal_net
+
+networks:
+	internal_net:
+		driver: overlay
+		internal: true
+	micro_net:
+		driver: bridge
